@@ -1,0 +1,77 @@
+*{
+    box-sizing: border-box;
+}
+
+
+
+/*=========================================================== Header AND Footer======*/
+.fixed-header, .fixed-footer{
+    width: 100%;
+    position: relative;        
+    background: rgb(92, 10, 10);
+    padding:15px ;
+    color: #fff;
+}
+.fixed-header{
+    top: 0;
+}
+.fixed-footer{
+    bottom: 0;
+    position: fixed;  
+}
+/*======================================================================================*/
+
+
+/*=====================================================Results list===========================*/
+.side {
+    -ms-flex: 20%;
+    flex:20%;
+    background-color: #bd949448;
+    padding: 20px;
+    padding-top: 35px;
+  }
+
+  .resultsDiv{
+   /* background-color:teal;*/
+    width: 100%;
+    padding: 20px;
+  }
+  .resultsDiv p{
+    padding-top: 10px;
+    color:white;
+  }
+  .resultsDiv li{
+    padding: 5px;
+    font-size: 15px;
+    font-weight: 400;
+  }
+/*======================================================================================*/
+
+/*=====================================================Main=============================*/
+.row {  
+    display: -ms-flexbox; 
+    display: flex;
+    -ms-flex-wrap: wrap; 
+    flex-wrap: wrap;
+  }
+.main {   
+    -ms-flex: 60%; 
+    flex: 60%;
+    background-color: white;
+    padding: 20px;
+    padding-top: 35px;
+  }
+  button{
+      margin: 20px;
+  }
+/*======================================================================================*/
+
+
+
+img{
+    display: inline-block;
+    width: 20%;
+    height: 300px;
+}
+
+

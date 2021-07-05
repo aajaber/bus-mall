@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="../Style/mainStyle.css">
     <link rel="stylesheet" href="../Style/reset.css">
 
+
+   <!----> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 </head>
 
 <body>
@@ -55,12 +58,15 @@
                      assumenda molestiae numquam voluptatibus.
                       Ullam fugiat cupiditate ab corrupti odit!
                 </p>
-                <button onclick="showResults()">View Results</button>
+                <button id="resultsButton" onclick="showResults(this.disabled=true)">View Results</button>
             </section>
+            <div>
+                <canvas id="resultsChart" width="150" height="150"></canvas>
+            </div>
         </div>
-
     </div>
 
+    
 
 
 
@@ -71,6 +77,9 @@
         <div class="container">Copyright &copy; 2021 Mall-Bus</div>
     </div>
     <!----------------------------------------------------------------------------->
+
+    <!-----------------------------------------------------------------------Script part-------------->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../JavaScript/app.js"></script>
 </body>
 

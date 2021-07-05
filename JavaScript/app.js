@@ -7,10 +7,20 @@ const rightImage = document.getElementById('right-image');
 const resultsList = document.getElementById('results-list');
 const selections = 25;
 
+
+let r = () => Math.random() * 256 >> 0;
+let r2 = () => Math.random() * 256 >> 0;
+let firstColor = `rgb(${r()}, ${r()}, ${r()})`;
+let secondColor=`rgb(${r2()}, ${r2()}, ${r2()})`;
+
 let counter = 0;
 let leftImageIndex;
 let rightImageIndex;
 let middleImageIndex;
+let imagesSet=[];
+let prodsNames = [];
+let selectedProds = [];
+let shownProds = [];
 //================================= Constructor=========
 function Product(name, sourcs) {
     this.name = name;
@@ -18,6 +28,7 @@ function Product(name, sourcs) {
     this.selected = 0;
     this.shown = 0;
     Product.prodArray.push(this);
+    prodsNames.push(this.name);
 }
 //========================= Objects Array ===============
 Product.prodArray = [];
@@ -45,7 +56,9 @@ new Product('wine-Glass', '../images/wine-glass.jpg');
 //   console.log(Product.prodArray);
 
 
+
 function renderProducts() {
+
     leftImageIndex = generateRandomIndexNumber();
     middleImageIndex = generateRandomIndexNumber();
     rightImageIndex = generateRandomIndexNumber();
@@ -53,11 +66,27 @@ function renderProducts() {
     // console.log(leftImageIndex);
     // console.log(middleImageIndex);
     // console.log(rightImageIndex);
-    while (leftImageIndex === middleImageIndex || middleImageIndex === rightImageIndex || leftImageIndex === rightImageIndex) {
+
+    
+    while (leftImageIndex === middleImageIndex || 
+        middleImageIndex === rightImageIndex || 
+        leftImageIndex === rightImageIndex
+        
+        || imagesSet.includes(leftImageIndex) ||
+        imagesSet.includes(middleImageIndex) || 
+        imagesSet.includes(rightImageIndex)) 
+    {
         leftImageIndex = generateRandomIndexNumber();
         middleImageIndex = generateRandomIndexNumber();
         rightImageIndex = generateRandomIndexNumber();
+ 
     }
+    imagesSet=[];
+    imagesSet.push(leftImageIndex);
+    imagesSet.push(middleImageIndex);
+    imagesSet.push(rightImageIndex);
+
+    
     Product.prodArray[leftImageIndex].shown++;
     Product.prodArray[middleImageIndex].shown++;
     Product.prodArray[rightImageIndex].shown++;
@@ -69,8 +98,6 @@ function renderProducts() {
     leftImage.alt = Product.prodArray[leftImageIndex].name;
     middleImage.alt = Product.prodArray[middleImageIndex].name;
     rightImage.alt = Product.prodArray[rightImageIndex].name;
-
-    
 
 }
 renderProducts();
@@ -93,21 +120,33 @@ function handler(event) {
         else if (event.target.id === 'right-image') {
             Product.prodArray[rightImageIndex].selected++;
         }
+        else{
+            counter --;
+            return
+        }
         renderProducts();
     }
     else {
         showResults;
     }
 }
+
+
+
 //============================== Rendering result===================
 function renderResult() {
     for (let i = 0; i < Product.prodArray.length; i++) {
+
+
+        selectedProds.push(Product.prodArray[i].selected);
+        shownProds.push(Product.prodArray[i].shown);
+
         let listElement = document.createElement('li');
         resultsList.appendChild(listElement);
         listElement.textContent = `${Product.prodArray[i].name} had ${Product.prodArray[i].selected} and  was seen ${Product.prodArray[i].shown} times`
     }
-    imagesSection.removeEventListener('click',handler);
-    imagesSection.removeEventListener('click',handler);
+    imagesSection.removeEventListener('click', handler);
+    
 }
 
 
@@ -116,6 +155,35 @@ function generateRandomIndexNumber() {
 }
 
 
-function showResults(){
-   renderResult();
-  }
+//================================= Rendering Chart =================================
+
+function renderChart() {
+    let ctx = document.getElementById('resultsChart')
+    let resultsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: prodsNames,
+            datasets: [{
+                label: 'Number of how many times this item was selected',
+                data: selectedProds,
+                backgroundColor: firstColor,
+                borderColor: firstColor,
+                borderWidth: 1
+            }, {
+                label: 'Number of how many times this item was shown',
+                data: shownProds,
+                backgroundColor: secondColor,
+                borderColor: secondColor,
+                borderWidth: 1
+            }]
+        },
+    })
+}
+
+
+//================================ this function will be called when the button is cliked ==============
+function showResults() {
+    renderResult();
+    renderChart();
+}
+

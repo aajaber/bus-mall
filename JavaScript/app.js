@@ -1,4 +1,3 @@
-
 //=============================== Consts ===============
 const imagesSection = document.getElementById('images-section');
 const leftImage = document.getElementById('left-image');
@@ -11,17 +10,18 @@ const selections = 25;
 let r = () => Math.random() * 256 >> 0;
 let r2 = () => Math.random() * 256 >> 0;
 let firstColor = `rgb(${r()}, ${r()}, ${r()})`;
-let secondColor=`rgb(${r2()}, ${r2()}, ${r2()})`;
+let secondColor = `rgb(${r2()}, ${r2()}, ${r2()})`;
 
 let counter = 0;
 let leftImageIndex;
 let rightImageIndex;
 let middleImageIndex;
-let imagesSet=[];
+let imagesSet = [];
 let prodsNames = [];
 let selectedProds = [];
 let shownProds = [];
-//================================= Constructor=========
+
+//================================= Constructor =========
 function Product(name, sourcs) {
     this.name = name;
     this.sourcs = sourcs;
@@ -29,6 +29,7 @@ function Product(name, sourcs) {
     this.shown = 0;
     Product.prodArray.push(this);
     prodsNames.push(this.name);
+    saveInLocalStorage();
 }
 //========================= Objects Array ===============
 Product.prodArray = [];
@@ -67,26 +68,25 @@ function renderProducts() {
     // console.log(middleImageIndex);
     // console.log(rightImageIndex);
 
-    
-    while (leftImageIndex === middleImageIndex || 
-        middleImageIndex === rightImageIndex || 
+
+    while (leftImageIndex === middleImageIndex ||
+        middleImageIndex === rightImageIndex ||
         leftImageIndex === rightImageIndex
-        
+
         || imagesSet.includes(leftImageIndex) ||
-        imagesSet.includes(middleImageIndex) || 
-        imagesSet.includes(rightImageIndex)) 
-    {
+        imagesSet.includes(middleImageIndex) ||
+        imagesSet.includes(rightImageIndex)) {
         leftImageIndex = generateRandomIndexNumber();
         middleImageIndex = generateRandomIndexNumber();
         rightImageIndex = generateRandomIndexNumber();
- 
+
     }
-    imagesSet=[];
+    imagesSet = [];
     imagesSet.push(leftImageIndex);
     imagesSet.push(middleImageIndex);
     imagesSet.push(rightImageIndex);
 
-    
+
     Product.prodArray[leftImageIndex].shown++;
     Product.prodArray[middleImageIndex].shown++;
     Product.prodArray[rightImageIndex].shown++;
@@ -102,14 +102,14 @@ function renderProducts() {
 }
 renderProducts();
 
-/*=====================Adding  a click listener==================*/
+/*=====================Adding  a click listener ==================*/
 
 imagesSection.addEventListener('click', handler);
 
 function handler(event) {
     counter++;
 
-    console.log(event.target.id);
+    // console.log(event.target.id);
     if (selections >= counter) {
         if (event.target.id === 'left-image') {
             Product.prodArray[leftImageIndex].selected++;
@@ -120,8 +120,8 @@ function handler(event) {
         else if (event.target.id === 'right-image') {
             Product.prodArray[rightImageIndex].selected++;
         }
-        else{
-            counter --;
+        else {
+            counter--;
             return
         }
         renderProducts();
@@ -129,11 +129,12 @@ function handler(event) {
     else {
         showResults;
     }
+    saveInLocalStorage();
 }
 
 
 
-//============================== Rendering result===================
+//============================== Rendering result ===================
 function renderResult() {
     for (let i = 0; i < Product.prodArray.length; i++) {
 
@@ -146,7 +147,7 @@ function renderResult() {
         listElement.textContent = `${Product.prodArray[i].name} had ${Product.prodArray[i].selected} and  was seen ${Product.prodArray[i].shown} times`
     }
     imagesSection.removeEventListener('click', handler);
-    
+
 }
 
 
@@ -179,11 +180,33 @@ function renderChart() {
         },
     })
 }
+//================================ set Item function ======================
 
-
-//================================ this function will be called when the button is cliked ==============
-function showResults() {
-    renderResult();
-    renderChart();
+function saveInLocalStorage() {
+    const convertedProdArray = JSON.stringify(Product.prodArray);
+    localStorage.setItem('Products', convertedProdArray);
 }
 
+//=============================== get item function=========================
+
+function getFromLocalStorage() {
+    const data = localStorage.getItem('Products');
+    const parsedData = JSON.parse(data);
+    // console.log(data);
+    //console.log(parsedData);
+
+    if (parsedData !== null) {
+        Product.prodArray = parsedData;
+      //  showResults;
+    }
+}
+
+//================================ this function will be called when the button is clicked ==============
+function showResults() {
+
+    renderResult();
+    renderChart();
+
+}
+
+getFromLocalStorage();

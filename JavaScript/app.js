@@ -29,7 +29,6 @@ function Product(name, sourcs) {
     this.shown = 0;
     Product.prodArray.push(this);
     prodsNames.push(this.name);
-    saveInLocalStorage();
 }
 //========================= Objects Array ===============
 Product.prodArray = [];
